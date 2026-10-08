@@ -10,6 +10,7 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
+          cache: "pip"
       - run: pip install -e ".[dev]"
       - run: python -m churn.model
       - run: pytest
