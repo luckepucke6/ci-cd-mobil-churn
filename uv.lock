@@ -6,10 +6,10 @@ resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'emscripten'",
     "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'win32'",
-    "python_full_version < '3.12' and sys_platform == 'win32'",
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
-    "python_full_version < '3.12' and sys_platform == 'emscripten'",
     "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version < '3.12' and sys_platform == 'win32'",
+    "python_full_version < '3.12' and sys_platform == 'emscripten'",
     "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
 ]
 
@@ -29,6 +29,7 @@ source = { editable = "." }
 dependencies = [
     { name = "joblib" },
     { name = "pandas" },
+    { name = "pytest" },
     { name = "scikit-learn" },
 ]
 
@@ -47,6 +48,7 @@ requires-dist = [
     { name = "joblib", specifier = ">=1.4" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "pandera", marker = "extra == 'data'", specifier = ">=0.24" },
+    { name = "pytest", specifier = ">=9.1.1" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.16" },
