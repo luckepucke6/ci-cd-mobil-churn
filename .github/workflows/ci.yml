@@ -3,16 +3,44 @@ name: CI
 on: push
 
 jobs:
-  allt:
+  tests:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # avbryter inte om en av versionerna går rött
+      matrix: # kör en kopia av varje värde, versioner i detta fallet
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
+          python-version: ${{ matrix.python-version }}
+          cache: "pip" 
+      - run: pip install -e ".[dev]"  
+      - run: pytest
+      
+  training:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: 
+          python-version: "3.11"
           cache: "pip"
       - run: pip install -e ".[dev]"
       - run: python -m churn.model
-      - run: pytest
+      
 
-      #test with cache 2
+
+
+            # allt:
+            #   runs-on: ubuntu-latest
+            #   steps:
+            #     - uses: actions/checkout@v7
+            #     - uses: actions/setup-python@v7
+            #       with:
+            #         python-version: "3.13"
+            #         cache: "pip"
+            #     - run: pip install -e ".[dev]"
+            #     - run: python -m churn.model
+            #     - run: pytest
