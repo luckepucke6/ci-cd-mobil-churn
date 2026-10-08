@@ -11,5 +11,5 @@ jobs:
         with:
           python-version: "3.13"
       - run: pip install -e ".[dev]"
-      - run: pytest
       - run: python -m churn.model
+      - run: pytest
