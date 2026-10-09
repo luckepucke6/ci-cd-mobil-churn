@@ -2,8 +2,23 @@ name: CI
 
 on: 
   push:
+    branches: [main]
+    paths:
+    - "src/**"
+    - ".github/**"
+    - "data/**"
+    - "tests/**"
+    - pyproject.toml
+    - uv.lock
   pull_request:
     branches: [main]
+    paths:
+    - "src/**"
+    - ".github/**"
+    - "data/**"
+    - "tests/**"
+    - pyproject.toml
+    - uv.lock
 
 jobs:
   tests:
