@@ -1,16 +1,56 @@
 name: CI
 
-on: push
+on: 
+  push:
+  pull_request:
+    branches: [main]
 
 jobs:
-  allt:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false # avbryter inte om en av versionerna går rött
+      matrix: # kör en kopia av varje värde, versioner i detta fallet
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: "pip" 
+      - run: pip install -e ".[dev]" 
+      - run: python -m churn.model 
+      - run: pytest
+      
+  training:
+    needs: tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: 
+          python-version: "3.11"
+          cache: "pip"
+      - run: pip install -e ".[dev]"
+      - run: python -m churn.model
+      - uses: actions/upload-artifact@v4
+        with:
+          name: modell-${{ github.sha }} # lägger till så att github hashen kommer med
+          path: outputs/
+    
+  evaluate:
+    needs: training
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
-      - uses: astral-sh/setup-uv@v6
-      - run: uv sync
-      - run: uv run pytest
-      - run: uv run python -m churn.model
+          python-version: "3.11"
+      - run: pip install -e .
+      - uses: actions/download-artifact@v4
+        with:
+          name: modell-${{ github.sha }}
+          path: outputs/
+      - run: cat "outputs/matvarden.json" >> $GITHUB_STEP_SUMMARY # skriver matvarden.json till summaryn i github actions
+      - run: python -m churn.evaluate
+

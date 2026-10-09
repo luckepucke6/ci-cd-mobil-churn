@@ -24,3 +24,7 @@ htmlcov/
 .idea/
 .DS_Store
 Thumbs.db
+
+# modellfiler (byggs i ci, ska inte ligga i git)
+/models
+*.joblib

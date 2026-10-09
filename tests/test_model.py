@@ -34,3 +34,7 @@ def test_senaste_traningen_ar_godkand():
     # Lades till efter förra incidenten: kolla att senaste träningen har ett rimligt ROC AUC.
     matvarden = json.loads(Path("outputs/matvarden.json").read_text())
     assert matvarden["roc_auc"] >= 0.70
+
+def test_roc_auc_tillrackligt_bra(resultat):
+    _, matvarden = resultat
+    assert matvarden["roc_auc"] >= 0.70
