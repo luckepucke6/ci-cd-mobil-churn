@@ -53,4 +53,6 @@ jobs:
           path: outputs/
       - run: cat "outputs/matvarden.json" >> $GITHUB_STEP_SUMMARY # skriver matvarden.json till summaryn i github actions
       - run: python -m churn.evaluate
+        env:
+          MIN_ROC_AUC: 0.9
 
