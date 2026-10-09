@@ -20,6 +20,10 @@ on:
     - pyproject.toml
     - uv.lock
 
+concurrency:
+  group: Workflow namn-${{ github.workflow }} branch-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   tests:
     runs-on: ubuntu-latest

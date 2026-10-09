@@ -76,4 +76,4 @@ python -m churn.score           # skriver outputs/ringlista.csv
 | `.github/workflows/ci.yml` | Vårt CI |
 
 
-Testing testing
+Testing testing jaoooo
