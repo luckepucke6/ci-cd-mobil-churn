@@ -53,3 +53,4 @@ jobs:
           path: outputs/
       - run: cat "outputs/matvarden.json" >> $GITHUB_STEP_SUMMARY # skriver matvarden.json till summaryn i github actions
       - run: python -m churn.evaluate
+
