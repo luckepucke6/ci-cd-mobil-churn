@@ -1,6 +1,7 @@
 name: CI
 
-on: 
+on:
+  workflow_dispatch: 
   push:
     branches: [main]
     paths:
@@ -19,6 +20,8 @@ on:
     - "tests/**"
     - pyproject.toml
     - uv.lock
+  schedule:
+    - cron: "0 5 * * 1"
 
 concurrency:
   group: Workflow namn-${{ github.workflow }} branch-${{ github.ref }}
@@ -72,4 +75,24 @@ jobs:
           path: outputs/
       - run: cat "outputs/matvarden.json" >> $GITHUB_STEP_SUMMARY # skriver matvarden.json till summaryn i github actions
       - run: python -m churn.evaluate
+
+  ringlista:
+    needs: evaluate
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.11"
+      - run: pip install -e .
+      - uses: actions/download-artifact@v4
+        with:
+          name: modell-${{ github.sha }}
+          path: outputs/
+      - run: python -m churn.score
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ringlista-${{ github.sha }}
+          path: outputs/ringlista.csv
 
