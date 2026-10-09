@@ -1,6 +1,9 @@
 name: CI
 
-on: push
+on: 
+  push:
+  pull_request:
+    branches: [main]
 
 jobs:
   tests:
@@ -32,7 +35,7 @@ jobs:
       - run: python -m churn.model
       - uses: actions/upload-artifact@v4
         with:
-          name: modell-${{ github.sha }}
+          name: modell-${{ github.sha }} # lägger till så att github hashen kommer med
           path: outputs/
     
   evaluate:
@@ -48,5 +51,5 @@ jobs:
         with:
           name: modell-${{ github.sha }}
           path: outputs/
-      - run: cat "outputs/matvarden.json" >> $GITHUB_STEP_SUMMARY
+      - run: cat "outputs/matvarden.json" >> $GITHUB_STEP_SUMMARY # skriver matvarden.json till summaryn i github actions
       - run: python -m churn.evaluate
