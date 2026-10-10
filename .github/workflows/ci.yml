@@ -36,11 +36,10 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pip" 
-      - run: pip install -e ".[dev]" 
+          paket: ".[dev]"
       - run: python -m churn.model 
       - run: pytest
       
@@ -49,11 +48,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: ./.github/actions/setup
         with: 
-          python-version: "3.11"
-          cache: "pip"
-      - run: pip install -e ".[dev]"
+          paket: ".[dev]"
       - run: python -m churn.model
       - uses: actions/upload-artifact@v4
         with:
@@ -65,10 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.11"
-      - run: pip install -e .
+      - uses: ./.github/actions/setup
       - uses: actions/download-artifact@v4
         with:
           name: modell-${{ github.sha }}
@@ -82,10 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.11"
-      - run: pip install -e .
+      - uses: ./.github/actions/setup
       - uses: actions/download-artifact@v4
         with:
           name: modell-${{ github.sha }}
