@@ -36,7 +36,7 @@ jobs:
         python-version: ["3.11", "3.12", "3.13"]
     steps:
       - uses: actions/checkout@v7
-      - uses: ./.github/actions/setup
+      - uses: ./.github/actions/setup # använder .github/actions/setup så att det inte blir dry. om inget är anget med 'with' så kommer standardvärden anges som står specade i action.yml
         with:
           python-version: ${{ matrix.python-version }}
           paket: ".[dev]"
