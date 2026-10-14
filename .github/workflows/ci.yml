@@ -50,7 +50,8 @@ jobs:
       - uses: ./.github/actions/setup
         with:
           paket: ".[data]"
-      - run: python -m kontroller.schema
+      - run: python -m kontroller.schema data/kundbas.csv
+      # - run: python -m kontroller.schema data.kundbas_ny_leverans
 
   training:
     needs: [tests, datakontroll]
