@@ -43,8 +43,17 @@ jobs:
       - run: python -m churn.model 
       - run: pytest
       
+  datakontroll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          paket: ".[data]"
+      - run: python -m kontroller.schema
+
   training:
-    needs: tests
+    needs: [tests, datakontroll]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
