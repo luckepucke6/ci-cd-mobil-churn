@@ -1,7 +1,12 @@
 name: CI
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
+    inputs:
+      datafil:
+        description: "Vilken datafil i data/ ska kontrolleras?"
+        type: string
+        default: "kundbas.csv"
   push:
     branches: [main]
     paths:
@@ -50,8 +55,7 @@ jobs:
       - uses: ./.github/actions/setup
         with:
           paket: ".[data]"
-      - run: python -m kontroller.schema data/kundbas.csv
-      # - run: python -m kontroller.schema data.kundbas_ny_leverans
+      - run: python -m kontroller.schema data/${{ inputs.datafil || 'kundbas.csv' }}
 
   training:
     needs: [tests, datakontroll]
