@@ -1,7 +1,12 @@
 name: CI
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
+    inputs:
+      datafil:
+        description: "Vilken datafil i data/ ska kontrolleras?"
+        type: string
+        default: "kundbas.csv"
   push:
     branches: [main]
     paths:
@@ -43,8 +48,17 @@ jobs:
       - run: python -m churn.model 
       - run: pytest
       
+  datakontroll:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          paket: ".[data]"
+      - run: python -m kontroller.schema data/${{ inputs.datafil || 'kundbas.csv' }}
+
   training:
-    needs: tests
+    needs: [tests, datakontroll]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
